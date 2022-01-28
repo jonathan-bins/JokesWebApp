@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JokesWebApp.Data;
 using JokesWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JokesWebApp.Controllers
 {
@@ -35,7 +35,7 @@ namespace JokesWebApp.Controllers
         // POST: Jokes/ShowSearchResults
         public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
         {
-            return View("Index", await _context.Joke.ToListAsync());
+            return View("Index", await _context.Joke.Where( j => j.JokeQuestion.Contains(SearchPhrase)).ToListAsync());
         }
 
         // GET: Jokes/Details/5
@@ -57,6 +57,8 @@ namespace JokesWebApp.Controllers
         }
 
         // GET: Jokes/Create
+
+        [Authorize]
         public IActionResult Create()
         {
             return View();
